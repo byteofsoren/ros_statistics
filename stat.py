@@ -49,7 +49,9 @@ def analyse(argv, array, confidence=0.95):
         mean = np.mean(a[:,c])
         sem = scipy.stats.sem(a[:,c])
         conf = sem * scipy.stats.t.ppf((1 + confidence) / 2., n-1)
-        ret_array.append([mean,mean-conf,mean+conf,n,confidence])
+        worst = max(a[:,c])
+        best = min(a[:,c])
+        ret_array.append([mean,mean-conf,mean+conf,n,confidence, best,worst])
     return ret_array
 
 def show_data(array):
@@ -61,9 +63,11 @@ def show_data(array):
     """
     print("========================================")
     for row in array:
+        print("Sample size: {}".format(row[3]))
         print("Mean: {m}\nConfidence interval {p}%:".format(m=row[0], p=row[4]*100))
         print("  {low} to {high}".format(low=row[1],high=row[2]))
-        print("Sample size: {}".format(row[3]))
+        print("Best and worst case")
+        print("  {best}, {worst}".format(best=row[5], worst=row[6]))
         print("\n========================================")
 
 if __name__ == "__main__":
@@ -83,4 +87,9 @@ if __name__ == "__main__":
         print("keyword 13, 24, 42")
         print("Then reduce the information to:")
         print("13, 24, 42")
+        print("After that dependent on what axis that was given it show the folowing:")
+        print("Sample1. Sample size.")
+        print("2. Mean,")
+        print("3. Confidense intervall with 95%")
+        print("4. Best and Worst case.")
 
